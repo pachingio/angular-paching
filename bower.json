@@ -1,0 +1,26 @@
+{
+  "name": "angular-paching",
+  "version": "0.1.0",
+  "authors": [
+    "ITrex"
+  ],
+  "description": "An Angular js module to connect to ITrex's Paching ad API",
+  "keywords": [
+    "ad",
+    "paching",
+    "api",
+    "rest",
+    "itrex",
+    "angular",
+    "js"
+  ],
+  "license": "Free to use only for all Paching members",
+  "homepage": "http://www.paching.io",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
