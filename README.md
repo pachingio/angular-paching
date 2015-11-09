@@ -20,9 +20,9 @@ Example Angular Controller
 
 angular.app('yourApp', ['paching'])
 	.config([
-		'pachingConfig',
+		'pachingConfigProvider',
 		function(pachingConfig){
-			pachingConfig.configure({
+			pachingConfigProvider.configure({
 				token:"",
 				timeout:5000,
 				threshold:1,

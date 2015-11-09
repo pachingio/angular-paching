@@ -24,11 +24,20 @@
 			};
 
 		    this.$get = function() {
-		      return {
-		        token: this.config.token,
-		        timeout: this.config.timeout,
-		        threshold: this.config.threshold
-		      };
+
+				return {
+					token: this.config.token,
+					timeout: this.config.timeout,
+					threshold: this.config.threshold,
+					domain: this.config.domain,
+					domain: this.config.protocol
+					getUrl: function(endpoint){
+						if(!endpoint){
+							endpoint = "";
+						}
+			    		return this.protocol + '://' + this.domain + '/' + endpoint +'?token=' + this.token;
+			    	}
+				};
 		    };
 
 		    this.configure = function(config){
@@ -68,9 +77,12 @@
 
 				paching.getLinkData = function(){
 					var q = $q.defer();
-					$http.post(
-						pachingConfig.protocol + '://' + pachingConfig.domain + '/?token=' + pachingConfig.token,
-						{fingerprint: createFingerprint()})
+					$http({
+						'method': 'POST',
+						'url': ulrpachingConfig.getUrl('hits'),
+						'data': {fingerprint: createFingerprint()},
+						'params': {'token':pachingConfig.token}
+					})
 						.then(function succesCallback (link) {
 							if(link.data && link.data.threshold >= pachingConfig.threshold){
 								q.resolve(link);
@@ -84,7 +96,80 @@
 					return q.promise;
 				}
 
-				function createFingerprint(argument) {
+				paching.regiserUser = function(userId, link){
+					if(!userId || !link){
+						return false;
+					}
+
+					var q = $q.defer();
+
+					$http({
+						'method': 'POST',
+						'url': pachingConfig.getUrl('adsUsers'),
+						'data': {'remoteUserId':userId,'linkId':link.id},
+						'params': {'token':pachingConfig.token}
+					})
+						.then(function succesCallback(user){
+							q.resolve(user);
+						}, function errorCallback(error){
+							q.reject(error);
+						});
+
+					return q.promise;
+				}
+
+				paching.regiserPayment = function(userId, productId, productName, productType, productPrice){
+					if(!userId || !productId || !productType || !productPrice || !productName){
+						return false;
+					}
+
+					var q = $q.defer();
+
+					$http({
+						'method': 'POST',
+						'url': pachingConfig.getUrl('adsProducts'),
+						'data': {
+							'remoteUserId': userId,
+							'remoteProductId': productId,
+							'productPrice': productPrice,
+							'productName': productName,
+							'productType':productType
+						},
+						'params': {'token':pachingConfig.token}
+					})
+						.then(function succesCallback(payment){
+							q.resolve(payment);
+						}, function errorCallback(error){
+							q.reject(error);
+						});
+
+					return q.promise;
+				}
+
+				function createFingerprint() {
+
+					var screenDimentions = {
+						height: window.innerHeight,
+						width: window.innerWidth
+					};
+
+					window.screen.screenDimentions = screenDimentions;
+
+					var fingerprint = JSON.stringify( 
+						window.screen, 
+						[
+							"availHeight",
+							"availLeft",
+							"availTop",
+							"availWidth",
+							"colorDepth",
+							"height",
+							"orientation",
+							"pixelDepth",
+							"width",
+							"screenDimentions"
+						]
+					);
 
 					return fingerprint;	
 				}
