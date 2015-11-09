@@ -5,9 +5,7 @@
 * @require 
 */
 
-
 'use strict';
-
 (function(){
 
 	angular
@@ -20,7 +18,7 @@
 				timeout:5000,
 				threshold:1,
 				domain: "pcg.io",
-				protocol:"https"
+				protocol:"http"
 			};
 
 		    this.$get = function() {
@@ -30,7 +28,7 @@
 					timeout: this.config.timeout,
 					threshold: this.config.threshold,
 					domain: this.config.domain,
-					domain: this.config.protocol
+					domain: this.config.protocol,
 					getUrl: function(endpoint){
 						if(!endpoint){
 							endpoint = "";
