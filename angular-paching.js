@@ -28,12 +28,13 @@
 					timeout: this.config.timeout,
 					threshold: this.config.threshold,
 					domain: this.config.domain,
-					domain: this.config.protocol,
+					protocol: this.config.protocol,
 					getUrl: function(endpoint){
 						if(!endpoint){
 							endpoint = "";
 						}
-			    		return this.protocol + '://' + this.domain + '/' + endpoint +'?token=' + this.token;
+						undefined://http/hits?token=igi9zzp1&token=igi9zzp1
+			    		return this.protocol + '://' + this.domain + '/' + endpoint;
 			    	}
 				};
 		    };
@@ -73,16 +74,24 @@
 
 			function($q, $http, pachingConfig){
 
+				var paching = {};
+
 				paching.getLinkData = function(){
 					var q = $q.defer();
 					$http({
 						'method': 'POST',
-						'url': ulrpachingConfig.getUrl('hits'),
+						'url': pachingConfig.getUrl('hits'),
 						'data': {fingerprint: createFingerprint()},
 						'params': {'token':pachingConfig.token}
 					})
 						.then(function succesCallback (link) {
 							if(link.data && link.data.threshold >= pachingConfig.threshold){
+								if(!link.type){
+									link.type = "";
+								}
+								if(!link.description){
+									link.description = "";
+								}
 								q.resolve(link);
 							}else{
 								q.reject(link);
@@ -171,6 +180,8 @@
 
 					return fingerprint;	
 				}
-			};
+
+				return paching;
+			}
 		]);
 })();
