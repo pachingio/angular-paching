@@ -85,16 +85,16 @@
 						'params': {'token':pachingConfig.token}
 					})
 						.then(function succesCallback (link) {
-							if(link.data && link.data.threshold >= pachingConfig.threshold){
-								if(!link.type){
-									link.type = "";
+							if(link.data && link.data.matchProbability >= pachingConfig.threshold){
+								if(!link.data.linkType){
+									link.data.linkType = "";
 								}
-								if(!link.description){
-									link.description = "";
+								if(!link.data.linkDescription){
+									link.data.linkDescription = "";
 								}
-								q.resolve(link);
+								q.resolve(link.data);
 							}else{
-								q.reject(link);
+								q.reject(link.data);
 							}
 
 						},function errorCallback (error) {
@@ -117,7 +117,11 @@
 						'params': {'token':pachingConfig.token}
 					})
 						.then(function succesCallback(user){
-							q.resolve(user);
+							if(user.data){
+								q.resolve(user.data);
+							}else{
+								q.reject(user);
+							}
 						}, function errorCallback(error){
 							q.reject(error);
 						});
@@ -145,7 +149,11 @@
 						'params': {'token':pachingConfig.token}
 					})
 						.then(function succesCallback(payment){
-							q.resolve(payment);
+							if(payment.data){
+								q.resolve(payment.data);
+							}else{
+								q.reject(payment);
+							}
 						}, function errorCallback(error){
 							q.reject(error);
 						});
