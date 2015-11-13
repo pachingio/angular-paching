@@ -112,7 +112,7 @@
 
 					$http({
 						'method': 'POST',
-						'url': pachingConfig.getUrl('adsUsers'),
+						'url': pachingConfig.getUrl('adsusers'),
 						'data': {'remoteUserId':userId,'linkId':link.id},
 						'params': {'token':pachingConfig.token}
 					})
@@ -138,7 +138,7 @@
 
 					$http({
 						'method': 'POST',
-						'url': pachingConfig.getUrl('adsProducts'),
+						'url': pachingConfig.getUrl('adsproducts'),
 						'data': {
 							'remoteUserId': userId,
 							'remoteProductId': productId,
